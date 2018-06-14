@@ -151,7 +151,7 @@ var AppModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".card {\n    padding: 10px;\n}\n"
+module.exports = ".card {\n    padding: 10px;\n}\n\n#todo {\n}"
 
 /***/ }),
 
@@ -162,7 +162,7 @@ module.exports = ".card {\n    padding: 10px;\n}\n"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"card\">\n  <form #data=\"ngForm\" (ngSubmit)=\"submit(data)\">\n        <input type=\"text\" name=\"task\" [(ngModel)]=\"todo_model.task\" #task=\"ngModel\" placeholder=\"New Task\" >\n        <button class=\"btn red accent-6\">  <span class=\"fa fa-plus\"> </span></button>\n  </form> \n\n  \n</div>"
+module.exports = "<div class=\"card\">\n  <form #data=\"ngForm\" (ngSubmit)=\"submit(data)\">\n    <input type=\"text\" name=\"task\" id=\"todo\" [(ngModel)]=\"todo_model.task\" #task=\"ngModel\" placeholder=\"New Task\">\n    <button class=\"btn red accent-6\">\n      <span class=\"fa fa-plus\"> </span>\n    </button>\n  </form>\n</div>\n"
 
 /***/ }),
 
@@ -192,6 +192,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var AddTodoComponent = /** @class */ (function () {
     function AddTodoComponent(dataService) {
         this.dataService = dataService;
+        this.todoAdded = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
         this.priority = [
             'None',
             'Low',
@@ -205,20 +206,31 @@ var AddTodoComponent = /** @class */ (function () {
             done: false,
             priority: this.priority[0],
             notes: '',
-            background: '',
-            more: false
+            background: ''
         };
     }
     AddTodoComponent.prototype.ngOnInit = function () {
     };
     AddTodoComponent.prototype.submit = function (_a) {
+        var _this = this;
         var valid = _a.valid, value = _a.value;
         if (valid) {
             if (value.task !== '') {
-                this.dataService.addTodo(value);
+                this.dataService.addTodo(value)
+                    .then(function () {
+                    _this.todo_model.task = '';
+                })
+                    .catch(function (err) {
+                    alert(err);
+                });
             }
         }
+        this.todoAdded.emit(value);
     };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        __metadata("design:type", Object)
+    ], AddTodoComponent.prototype, "todoAdded", void 0);
     AddTodoComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-add-todo',
@@ -252,7 +264,7 @@ module.exports = "li {\n    display: inline;\n}\n\n    "
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<nav class=\"navbar navbar-fixed red\">\n    &nbsp; &nbsp;    <span class=\"\"> todoApp</span>\n</nav>"
+module.exports = "<nav class=\"navbar navbar-fixed red\">\n  &nbsp; &nbsp;\n  <span class=\"\"> todoApp</span>\n\n\n  <!-- <app-popup [message]=\"message\">\n\n  </app-popup> -->\n\n</nav>\n"
 
 /***/ }),
 
@@ -315,7 +327,7 @@ module.exports = ".popup {\n    margin: auto;\n    width: 60%;\n    z-index: 999
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"popup card\">\n  <br>\n  <div class=\"container\">\n    <h6> Are you sure you want to delete this item?</h6>\n  </div>\n  <div class=\"container center\"> \n    <button class=\"btn red\">yes</button>\n    &nbsp;\n    <button class=\"btn green\">no</button>\n  </div>\n  <br>\n</div>"
+module.exports = "<div class=\"popup card\">\n  <br>\n  <div class=\"container\">\n    <h6 class=\"center\"> {{ message }} </h6>\n  </div>\n  <div class=\"container center\"> \n    <button class=\"btn red\" >ok</button>\n    &nbsp;\n  </div>\n  <br>\n</div>"
 
 /***/ }),
 
@@ -345,6 +357,10 @@ var PopupComponent = /** @class */ (function () {
     }
     PopupComponent.prototype.ngOnInit = function () {
     };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])('message'),
+        __metadata("design:type", String)
+    ], PopupComponent.prototype, "message", void 0);
     PopupComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-popup',
@@ -367,7 +383,7 @@ var PopupComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".card {\n    padding: 10px;\n}\n\n.fa-bars {\n    cursor: pointer;\n}\n\n.btn {\n    position: absolute;\n    right: 10px;\n    font-size: 0.7em;\n    bottom: 10px;\n}\n\n.inp {\n    border: none;\n    outline: none;\n}\n\n.fa {\n    color: #313131;\n}\n\n.fa-trash {\n    float: right;\n    cursor: pointer;\n    font-size: 1.4em;\n}\n\ninput[type=\"color\"] {\n    float: right;\n    margin-right: 10px; \n    opacity: 0.6;\n}\n\n.done {\n    cursor: pointer;\n}\n\n"
+module.exports = ".card {\n    padding: 10px; \n}\n\n.fa-bars {\n    cursor: pointer;\n}\n\n.btn {\n   \n    right: 10px;\n    font-size: 0.7em;\n    bottom: 10px;\n}\n\n.inp {\n    border: none;\n    outline: none;\n}\n\n.fa {\n    color: #313131;\n}\n\n.fa-trash {\n    float: right;\n    cursor: pointer;\n    font-size: 1.4em;\n}\n\n.area {\n    width: 100%;\n    \n}\n\n.misc {\n    width: 100%;\n}\n\ninput[type=\"color\"] {\n    float: right;\n    margin-right: 10px; \n    opacity: 0.6;\n    box-sizing: border-box;\n}\n\n.done {\n    cursor: pointer;\n}\n\n.popup {\n    margin: auto;\n    width: 60%;\n    z-index: 9999;\n}\n\n.buttons {\n    width: 100%;\n    display: flex;\n}\n"
 
 /***/ }),
 
@@ -378,7 +394,7 @@ module.exports = ".card {\n    padding: 10px;\n}\n\n.fa-bars {\n    cursor: poin
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"card\" [style.background]=\"todo.background\">\n  <div class=\"fa fa-bars\" (click)=\"todo.more = !todo.more\" ></div>\n  &nbsp;\n  <div class=\"fa done\" [class.fa-square]=\"todo.done\" [class.fa-square-o]=\"!todo.done\" (click)=\"todo.done = !todo.done\"> </div>\n  &nbsp;\n  <span>\n      {{ todo.task }}\n  </span>   \n  <div *ngIf=\"!todo.more\" class=\"fa fa-trash\"  (click)=\"delete(todo)\"></div> \n  <input type=\"color\" (change)=\"changed($event)\" class=\"inp\" >\n  &nbsp;\n  <div *ngIf=\"todo.more\" class=\"info row \">\n    <div class=\"col l6\">\n      <label> Notes</label>      \n      <textarea [(ngModel)]=\"todo.notes\">\n\n      </textarea>\n    </div>\n    <div class=\"col l6\">\n      <label> Due date </label> \n      <div class=\"row\">\n        <div class=\"col l6\">\n            <input type=\"date\">\n        </div>\n      <label> Priority </label>\n        <select>\n          <option value=\"a\"> None </option>\n          <option> Low </option>\n          <option> Medium </option>\n          <option> High </option>\n        </select>\n    </div>\n  </div>\n  <button class=\"btn btn-danger red accent-6\" (click)=\"delete(todo)\"> delete </button>\n</div>\n<app-popup *ngIf=\"clicked\">\n\n</app-popup>"
+module.exports = "<div class=\"card\" [style.background]=\"todo.background\">\n  <div class=\"fa fa-bars\" (click)=\"more = !more\"></div>\n  &nbsp; &nbsp; &nbsp;\n  <div class=\"fa done\" [class.fa-check-square-o]=\"todo.done\" [class.fa-square-o]=\"!todo.done\" (click)=\"todo.done = !todo.done\">\n  </div>\n  &nbsp;\n  <span>\n    {{ todo.task }}\n  </span>\n  <div *ngIf=\"!more\" class=\"fa fa-trash\" (click)=\"check = true;\"></div>\n  <input type=\"color\" class=\"color\" (change)=\"changed($event)\" class=\"inp\"> &nbsp;\n\n  <div *ngIf=\"more\" class=\"info row\">\n\n    <div class=\"area\">\n      <label> Notes</label>\n      <textarea [(ngModel)]=\"todo.notes\" rows=\"5\">\n\n      </textarea>\n    </div>\n      <div class=\"misc row\" >\n        <div class=\"col l6\">\n          <label> Due date </label>\n          <input type=\"date\" class=\"datepicker\" [(ngModel)]=\"todo.date\">\n        </div>\n        <div class=\"col l6\">\n          <label> Priority </label>\n          <select class=\"browser-default\" [(ngModel)]=\"todo.priority\">\n            <option> None </option>\n            <option> Low </option>\n            <option> Medium </option>\n            <option> High </option>\n          </select>\n      </div>\n    </div>\n\n  <div class=\"buttons\">\n    <button class=\"btn btn-danger green accent-6\" (click)=\"more = !more; update(todo)\"> save </button>\n    &nbsp; &nbsp;\n    <button class=\"btn btn-danger red accent-6\" (click)=\"check = true;more=flase\"> delete </button>\n\n  </div>\n  </div>\n\n</div>\n<div *ngIf=\"check\">\n  <div class=\"popup card\">\n    <br>\n    <div class=\"container\">\n      <h6> Are you sure you want to delete this item?</h6>\n    </div>\n    <div class=\"container center\">\n      <button class=\"btn red\" (click)=\"delete(todo)\">yes</button>\n      &nbsp;\n      <button class=\"btn green\" (click)=\"check=false\">no</button>\n    </div>\n    <br>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -410,12 +426,19 @@ var TodoComponent = /** @class */ (function () {
         this.dataService = dataService;
     }
     TodoComponent.prototype.ngOnInit = function () {
+        this.date = new Date(2010, 10, 10);
+        this.todo.date = this.date;
     };
     TodoComponent.prototype.changed = function (event) {
         this.todo.background = event.target.value;
+        this.update();
+    };
+    TodoComponent.prototype.update = function () {
+        this.dataService.update();
     };
     TodoComponent.prototype.delete = function (todo) {
         this.dataService.deleteTodo(todo);
+        todo.notes = navigator.vibrate([300, 300, 300]);
     };
     __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])('todo'),
@@ -454,7 +477,7 @@ module.exports = ".todos {\n    width: 60%;\n}\n\n@media (max-width : 600px) {\n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container todos\" >\n  <app-todo *ngFor=\"let todo of todos\" [todo]=\"todo\"></app-todo>\n  <app-add-todo></app-add-todo>\n</div>\n"
+module.exports = "<div class=\"container todos\" >\n  <div *ngIf=\"todos; else notodos\" >\n      <app-todo *ngFor=\"let todo of todos\" [todo]=\"todo\"></app-todo>\n  </div>\n  <ng-template #notodos>\n      <h3 class=\"green-text\">My good sir you have no tasks here yet!</h3>\n  </ng-template>\n  \n  <app-add-todo></app-add-todo>\n  \n</div>\n"
 
 /***/ }),
 
@@ -536,20 +559,35 @@ var DataService = /** @class */ (function () {
         this.todos = [];
     }
     DataService.prototype.getTodos = function () {
+        // Local storage implementation
+        localStorage.getItem('todos') === null
+            ? this.todos = []
+            : this.todos = JSON.parse(localStorage.getItem('todos'));
         return this.todos;
     };
     DataService.prototype.addTodo = function (todo) {
-        this.todos.push(todo);
-    };
-    DataService.prototype.deleteTodo = function (todo) {
         var _this = this;
-        var index;
-        this.todos.filter(function (t) {
-            if (t.task === todo.task) {
-                index = _this.todos.indexOf(todo);
+        return new Promise(function (resolve, reject) {
+            if (!_this.todos.includes(todo)) {
+                _this.todos.push(todo);
+                localStorage.setItem('todos', JSON.stringify(_this.todos));
+                resolve();
+            }
+            else {
+                reject('todo exists');
             }
         });
-        this.todos.splice(-1, index);
+    };
+    DataService.prototype.deleteTodo = function (todo) {
+        for (var i = 0; i < this.todos.length; i++) {
+            if (todo === this.todos[i]) {
+                this.todos.splice(i, 1);
+                localStorage.setItem('todos', JSON.stringify(this.todos));
+            }
+        }
+    };
+    DataService.prototype.update = function () {
+        localStorage.setItem('todos', JSON.stringify(this.todos));
     };
     DataService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
