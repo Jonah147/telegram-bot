@@ -62,6 +62,7 @@ task = {
   notes: "do some kungfu...",
   background: ""
 }
+db.collection('cities').doc('ef').set(task);
 
 bot.onText(/\/add/,(msg) => {
   bot.sendMessage(msg.chat.id, "add your task...");
